@@ -1,0 +1,281 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal, ActivityIndicator, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import MapView, { Marker } from 'react-native-maps';
+
+function GBIFImageCarousel({ scientificName }) {
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchGBIFImages() {
+      setLoading(true);
+      try {
+        const url = `https://api.gbif.org/v1/occurrence/search?mediaType=StillImage&scientificName=${encodeURIComponent(scientificName)}&limit=4`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const imgUrls = (data.results || [])
+          .flatMap(r => (r.media || []).map(m => m.identifier))
+          .filter(Boolean)
+          .slice(0, 5);
+        setImages(imgUrls);
+      } catch (e) {
+        setImages([]);
+      }
+      setLoading(false);
+    }
+    fetchGBIFImages();
+  }, [scientificName]);
+
+  if (loading) return <ActivityIndicator size="small" color="#2e7d32" style={{ marginVertical: 8 }} />;
+  if (!images.length) return null;
+
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel}>
+      {images.map((imgUrl, idx) => (
+        <Image
+          key={idx}
+          source={{ uri: imgUrl }}
+          style={styles.image}
+          resizeMode="cover"
+        />
+      ))}
+    </ScrollView>
+  );
+}
+
+export default function FavoritosScreen() {
+  const [favoritos, setFavoritos] = useState([]);
+  const [showMap, setShowMap] = useState(false);
+  const [mapPoints, setMapPoints] = useState([]);
+  const [mapLoading, setMapLoading] = useState(false);
+  const [mapTitle, setMapTitle] = useState('');
+
+  useEffect(() => {
+    const loadFavs = async () => {
+      const favs = await AsyncStorage.getItem('favoritos');
+      setFavoritos(favs ? JSON.parse(favs) : []);
+    };
+    loadFavs();
+  }, []);
+
+  const openMapModal = async (scientificName) => {
+    setShowMap(true);
+    setMapLoading(true);
+    setMapTitle(scientificName);
+    try {
+      const url = `https://api.gbif.org/v1/occurrence/search?scientificName=${encodeURIComponent(scientificName)}&limit=100`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const pts = (data.results || [])
+        .filter(r => r.decimalLatitude && r.decimalLongitude)
+        .map(r => ({
+          latitude: r.decimalLatitude,
+          longitude: r.decimalLongitude,
+        }));
+      setMapPoints(pts);
+    } catch (e) {
+      setMapPoints([]);
+    }
+    setMapLoading(false);
+  };
+
+  const eliminarFavorito = async (scientificName) => {
+    try {
+      const favs = await AsyncStorage.getItem('favoritos');
+      let favoritos = favs ? JSON.parse(favs) : [];
+      const nuevosFavoritos = favoritos.filter(f => f.species.scientificName !== scientificName);
+      await AsyncStorage.setItem('favoritos', JSON.stringify(nuevosFavoritos));
+      setFavoritos(nuevosFavoritos);
+      Alert.alert('Eliminado', 'El favorito ha sido eliminado.');
+    } catch (e) {
+      Alert.alert('Error', 'No se pudo eliminar el favorito');
+    }
+  };
+
+  const initialRegion = mapPoints.length
+    ? {
+        latitude: mapPoints[0].latitude,
+        longitude: mapPoints[0].longitude,
+        latitudeDelta: 30,
+        longitudeDelta: 30,
+      }
+    : {
+        latitude: 20,
+        longitude: 0,
+        latitudeDelta: 90,
+        longitudeDelta: 90,
+      };
+
+  //formatear fecha a dd/mm/yyyy
+  const formatDate = (isoString) => {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Favoritos 🌟</Text>
+      {favoritos.length === 0 ? (
+        <Text style={{ textAlign: 'center', marginTop: 30 }}>No tienes favoritos aún.</Text>
+      ) : (
+        favoritos.map((item, index) => {
+          const species = item.species;
+          const commonNames = species.commonNames?.join(', ') || 'Desconocido';
+          const family = species.family?.scientificName || 'Desconocida';
+          const genus = species.genus?.scientificName || 'Desconocido';
+
+          let fechaObs = item.fechaFavorito;
+          if (!fechaObs && item.fecha) fechaObs = item.fecha;
+          if (!fechaObs && item.timestamp) fechaObs = item.timestamp;
+
+          return (
+            <View key={index} style={styles.card}>
+              <Text style={styles.name}>{species.scientificName}</Text>
+              <GBIFImageCarousel scientificName={species.scientificName} />
+              <Text style={styles.common}>Nombre común: {commonNames}</Text>
+              <Text style={styles.detail}>Familia: {family}</Text>
+              <Text style={styles.detail}>Género: {genus}</Text>
+              <Text style={styles.detail}>
+                Fecha de observación: {fechaObs ? formatDate(fechaObs) : 'Sin fecha'}
+              </Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: '#1976d2',
+                    paddingVertical: 8,
+                    paddingHorizontal: 14,
+                    borderRadius: 8,
+                    marginRight: 8,
+                  }}
+                  onPress={() => openMapModal(species.scientificName)}
+                >
+                  <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                    Mapa de distribución
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: '#d32f2f',
+                    paddingVertical: 8,
+                    paddingHorizontal: 14,
+                    borderRadius: 8,
+                  }}
+                  onPress={() => eliminarFavorito(species.scientificName)}
+                >
+                  <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                    Eliminar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          );
+        })
+      )}
+
+      {/* Modal para el mapa de distribución */}
+      <Modal
+        visible={showMap}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowMap(false)}
+      >
+        <View style={{
+          flex: 1,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <View style={{
+            backgroundColor: '#fff',
+            borderRadius: 12,
+            padding: 10,
+            width: '95%',
+            maxHeight: '80%',
+            alignItems: 'center'
+          }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 8, textAlign: 'center' }}>
+              Distribución: {mapTitle}
+            </Text>
+            {mapLoading ? (
+              <ActivityIndicator style={{ marginTop: 30 }} />
+            ) : mapPoints.length === 0 ? (
+              <Text style={{ textAlign: 'center', marginTop: 30 }}>No hay datos de distribución.</Text>
+            ) : (
+              <MapView
+                style={{ width: '100%', height: 350, borderRadius: 10 }}
+                initialRegion={initialRegion}
+              >
+                {mapPoints.map((p, i) => (
+                  <Marker key={i} coordinate={p} />
+                ))}
+              </MapView>
+            )}
+            <TouchableOpacity
+              style={{
+                marginTop: 16,
+                backgroundColor: '#1976d2',
+                paddingVertical: 8,
+                paddingHorizontal: 24,
+                borderRadius: 8,
+              }}
+              onPress={() => setShowMap(false)}
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </ScrollView>
+  );
+}
+
+const screenWidth = Dimensions.get('window').width;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    backgroundColor: '#ffffff',
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  card: {
+    backgroundColor: '#f0f8f3',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    elevation: 3,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  common: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    marginVertical: 4,
+  },
+  detail: {
+    fontSize: 14,
+    marginVertical: 2,
+    fontWeight: 'bold',
+  },
+  carousel: {
+    marginTop: 12,
+  },
+  image: {
+    width: screenWidth * 0.6,
+    height: 180,
+    marginRight: 12,
+    borderRadius: 10,
+    backgroundColor: '#e0e0e0',
+  },
+});
