@@ -22,9 +22,9 @@ export default function App() {
          <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Login">
-          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'fade' }} />
-          <Stack.Screen name="Registro" component={RegisterScreen} options={{ headerShown: false, animation: 'fade' }} />
-          <Stack.Screen name="Inicio" component={HomeScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'fade' }}/>
+          <Stack.Screen name="Registro" component={RegisterScreen} options={{ headerShown: false, animation: 'fade' }}/>
+          <Stack.Screen name="Inicio" component={HomeScreen} options={{ headerShown: false, animation: 'fade' }}/>
           <Stack.Screen name="Identificacion" component={CameraScreen} />
           <Stack.Screen name="Resultado" component={ResultScreen} />
           <Stack.Screen name="Amigos" component={FriendsScreen} />
