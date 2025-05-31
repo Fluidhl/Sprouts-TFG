@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, ActivityIndicator, Alert, ImageBackground, Modal } from 'react-native';
 import * as Location from 'expo-location';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Heatmap } from 'react-native-maps';
 
 export default function HomeScreen({ navigation }) {
   const [location, setLocation] = useState(null);
   const [species, setSpecies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [city, setCity] = useState('');
-  // Estado para el modal de mapa
   const [showMap, setShowMap] = useState(false);
   const [mapPoints, setMapPoints] = useState([]);
   const [mapLoading, setMapLoading] = useState(false);
   const [mapTitle, setMapTitle] = useState('');
 
-  // Pedir permiso y obtener ubicación
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -27,7 +25,6 @@ export default function HomeScreen({ navigation }) {
     })();
   }, []);
 
-  // Buscar ciudad a partir de la ubicación
   useEffect(() => {
     if (!location) return;
     (async () => {
@@ -40,7 +37,6 @@ export default function HomeScreen({ navigation }) {
     })();
   }, [location]);
 
-  // Buscar especies cercanas cuando hay ubicación usando iNaturalist
   useEffect(() => {
     if (!location) return;
     setLoading(true);
@@ -79,7 +75,6 @@ export default function HomeScreen({ navigation }) {
     fetchNearbySpecies();
   }, [location]);
 
-  // Función para abrir el modal del mapa
   const openMapModal = async (scientificName) => {
     setShowMap(true);
     setMapLoading(true);
@@ -203,11 +198,24 @@ export default function HomeScreen({ navigation }) {
               <MapView
                 style={{ width: '100%', height: 350, borderRadius: 10 }}
                 initialRegion={initialRegion}
-                region={initialRegion} // Siempre centrado en Europa
+                region={initialRegion}
               >
-                {mapPoints.map((p, i) => (
-                  <Marker key={i} coordinate={p} />
-                ))}
+                {mapPoints.length > 0 && (
+                  <Heatmap
+                    points={mapPoints.map(p => ({
+                      latitude: p.latitude,
+                      longitude: p.longitude,
+                      weight: 1,
+                    }))}
+                    radius={40}
+                    opacity={0.7}
+                    gradient={{
+                      colors: ['#ff0000', 'rgba(255,0,0,0.3)', 'rgba(255,0,0,0.05)'],
+                      startPoints: [0.2, 0.5, 1],
+                      colorMapSize: 256,
+                    }}
+                  />
+                )}
               </MapView>
             )}
             <TouchableOpacity
@@ -228,6 +236,7 @@ export default function HomeScreen({ navigation }) {
     </ImageBackground>
   );
 }
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -239,7 +248,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 40,
     paddingHorizontal: 10,
-    backgroundColor: 'rgba(255,255,255,0.0)', // transparente
+    backgroundColor: 'rgba(255,255,255,0.0)',
   },
   logo: {
     width: 250,
