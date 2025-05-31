@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "TFG",
+    "name": "Sprouts",
     "slug": "TFG",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/apkIcon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "jsEngine": "jsc",
@@ -21,10 +21,16 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.rhams.Sprouts"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2eb7a1d9-d561-4e5d-bb34-8da1fa26d0e6"
+      }
     }
   }
 }
