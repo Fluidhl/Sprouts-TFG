@@ -185,8 +185,6 @@ export default function ResultScreen({ route, navigation }) {
             );
           })
         )}
-
-        {/* Modal para el mapa de distribución */}
         <Modal
           visible={showMap}
           animationType="slide"
