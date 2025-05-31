@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, StyleSheet, Alert, ActivityIndicator, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, Image, StyleSheet, Alert, ActivityIndicator, TouchableOpacity, ImageBackground } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 
@@ -16,6 +16,26 @@ export default function CameraScreen({ navigation }) {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      const { uri, base64 } = result.assets[0];
+      setImageUri(uri);
+      sendToPlantNet(base64);
+    }
+  };
+
+  const takePhoto = async () => {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert('Permiso requerido', 'Necesitamos acceso a la cámara.');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       quality: 1,
       base64: true,
@@ -100,6 +120,10 @@ export default function CameraScreen({ navigation }) {
           <Text style={styles.buttonText}>Seleccionar imagen</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.mainButton} onPress={takePhoto}>
+          <Text style={styles.buttonText}>Hacer una foto</Text>
+        </TouchableOpacity>
+
         {loading && <ActivityIndicator size="large" color="#1976d2" style={{ marginTop: 20 }} />}
 
         {imageUri && !loading && (
@@ -127,7 +151,7 @@ const styles = StyleSheet.create({
     width: 280,
     height: 280,
     marginBottom: -60,
-    marginTop: -80,
+    marginTop: -100,
   },
   title: {
     fontSize: 22,
