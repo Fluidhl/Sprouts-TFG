@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator, Dimensions, TouchableOpacity, Alert, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Heatmap } from 'react-native-maps';
 
 function GBIFImageCarousel({ scientificName }) {
   const [images, setImages] = useState([]);
@@ -73,7 +73,7 @@ export default function ResultScreen({ route, navigation }) {
       if (!favoritos.some(f => f.species.scientificName === item.species.scientificName)) {
         favoritos.push({
           ...item,
-          fechaFavorito: new Date().toISOString(), // <-- añade la fecha actual
+          fechaFavorito: new Date().toISOString(),
         });
         await AsyncStorage.setItem('favoritos', JSON.stringify(favoritos));
         Alert.alert('¡Guardado!', 'Añadido a favoritos.');
@@ -106,23 +106,16 @@ export default function ResultScreen({ route, navigation }) {
     setMapLoading(false);
   };
 
-  const initialRegion = mapPoints.length
-    ? {
-        latitude: mapPoints[0].latitude,
-        longitude: mapPoints[0].longitude,
-        latitudeDelta: 30,
-        longitudeDelta: 30,
-      }
-    : {
-        latitude: 20,
-        longitude: 0,
-        latitudeDelta: 90,
-        longitudeDelta: 90,
-      };
+  // Siempre centrado en Europa
+  const initialRegion = {
+    latitude: 50.0,
+    longitude: 10.0,
+    latitudeDelta: 35,
+    longitudeDelta: 35,
+  };
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Resultados de identificación 🌿</Text>
       {suggestions.length === 0 ? (
         <Text>No se encontraron coincidencias.</Text>
       ) : (
@@ -218,10 +211,24 @@ export default function ResultScreen({ route, navigation }) {
               <MapView
                 style={{ width: '100%', height: 350, borderRadius: 10 }}
                 initialRegion={initialRegion}
+                region={initialRegion}
               >
-                {mapPoints.map((p, i) => (
-                  <Marker key={i} coordinate={p} />
-                ))}
+                {mapPoints.length > 0 && (
+                  <Heatmap
+                    points={mapPoints.map(p => ({
+                      latitude: p.latitude,
+                      longitude: p.longitude,
+                      weight: 1,
+                    }))}
+                    radius={40}
+                    opacity={0.7}
+                    gradient={{
+                      colors: ['#ff0000', 'rgba(255,0,0,0.3)', 'rgba(255,0,0,0.05)'],
+                      startPoints: [0.2, 0.5, 1],
+                      colorMapSize: 256,
+                    }}
+                  />
+                )}
               </MapView>
             )}
             <TouchableOpacity
@@ -249,12 +256,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: '#ffffff',
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
   },
   card: {
     backgroundColor: '#f0f8f3',

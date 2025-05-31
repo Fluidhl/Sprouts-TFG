@@ -5,7 +5,6 @@ import { View } from 'react-native';
 import 'react-native-url-polyfill/auto';
 import 'react-native-get-random-values';
 
-
 import HomeScreen from './src/screens/HomeScreen';
 import CameraScreen from './src/screens/CameraScreen';
 import ResultScreen from './src/screens/ResultScreen';
@@ -19,14 +18,21 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <View style={{ flex: 1 }}>
-         <NavigationContainer>
+      <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login">
-          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'fade' }}/>
-          <Stack.Screen name="Registro" component={RegisterScreen} options={{ headerShown: false, animation: 'fade' }}/>
-          <Stack.Screen name="Inicio" component={HomeScreen} options={{ headerShown: false, animation: 'fade' }}/>
+          initialRouteName="Login"
+          screenOptions={{
+            headerTitleAlign: 'center', 
+            headerStyle: {
+              backgroundColor: 'rgb(215, 237, 244)',
+            },
+          }}
+        >
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'fade' }} />
+          <Stack.Screen name="Registro" component={RegisterScreen} options={{ headerShown: false, animation: 'fade' }} />
+          <Stack.Screen name="Inicio" component={HomeScreen} options={{ headerShown: false, animation: 'fade' }} />
           <Stack.Screen name="Identificacion" component={CameraScreen} />
-          <Stack.Screen name="Resultado" component={ResultScreen} />
+          <Stack.Screen name="Resultados de identificación" component={ResultScreen} />
           <Stack.Screen name="Amigos" component={FriendsScreen} />
           <Stack.Screen name="Favoritos" component={FavoritosScreen} />
         </Stack.Navigator>
@@ -34,4 +40,3 @@ export default function App() {
     </View>
   );
 }
-

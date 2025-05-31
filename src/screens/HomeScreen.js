@@ -117,6 +117,9 @@ export default function HomeScreen({ navigation }) {
           resizeMode="contain"
         />
         <View style={styles.carouselContainer}>
+          <Text style={styles.ubicacionText}>
+          Ubicación actual: {city ? city : 'Desconocida'}
+        </Text>
           <Text style={styles.subtitle}>Plantas observadas cerca de ti:</Text>
           <View style={styles.carouselBox}>
             {loading ? (
@@ -129,11 +132,16 @@ export default function HomeScreen({ navigation }) {
                 style={{ flexGrow: 0 }}
               >
                 {species.map((sp, idx) => (
-                  <TouchableOpacity key={idx} style={styles.card} onPress={() => openMapModal(sp.scientificName)}>
-                    <Image source={{ uri: sp.image }} style={styles.image} />
-                    <Text style={styles.speciesName}>{sp.name}</Text>
-                  </TouchableOpacity>
-                ))}
+              <TouchableOpacity
+                key={idx}
+                style={styles.card}
+                onPress={() => openMapModal(sp.scientificName)}
+                activeOpacity={1}
+              >
+                <Image source={{ uri: sp.image }} style={styles.image} />
+                <Text style={styles.speciesName}>{sp.name}</Text>
+              </TouchableOpacity>
+            ))}
               </ScrollView>
             ) : (
               <Text style={{ fontStyle: 'italic', marginVertical: 10, color: '#1976d2' }}>
@@ -142,9 +150,6 @@ export default function HomeScreen({ navigation }) {
             )}
           </View>
         </View>
-        <Text style={styles.ubicacionText}>
-          Ubicación actual: {city ? city : 'Desconocida'}
-        </Text>
 
         <TouchableOpacity
           style={styles.mainButton}
@@ -264,7 +269,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1976d2',
+    color: 'rgb(28, 76, 76)',
     marginBottom: 1,
     marginTop: -20,
   },
@@ -297,12 +302,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     fontWeight: 'bold',
-    color: '#1976d2',
+    color: 'rgb(28, 76, 76)',
   },
   mainButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1976d2',
+    backgroundColor: 'rgb(3, 57, 57)',
     borderRadius: 18,
     paddingVertical: 16,
     paddingHorizontal: 32,
@@ -319,9 +324,9 @@ const styles = StyleSheet.create({
   },
   ubicacionText: {
     marginTop: -20,
-    marginBottom: 48,
-    fontSize: 18,
-    color: '#1976d2',
+    marginBottom: 28,
+    fontSize: 24,
+    color: 'rgb(28, 76, 76)',
     fontWeight: 'bold',
     textAlign: 'center'
   },
