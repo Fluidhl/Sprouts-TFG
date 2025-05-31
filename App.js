@@ -22,7 +22,7 @@ export default function App() {
         <Stack.Navigator
           initialRouteName="Login"
           screenOptions={{
-            headerTitleAlign: 'center', 
+            headerTitleAlign: 'center',
             headerStyle: {
               backgroundColor: 'rgb(215, 237, 244)',
             },

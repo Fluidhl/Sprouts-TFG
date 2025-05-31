@@ -88,11 +88,11 @@ export default function CameraScreen({ navigation }) {
             style={styles.picker}
             dropdownIconColor="#4a6a6a"
           >
-            <Picker.Item label="Hoja" value="leaf"/>
-            <Picker.Item label="Flor" value="flower"/>
-            <Picker.Item label="Fruto" value="fruit"/>
-            <Picker.Item label="Corteza" value="bark"/>
-            <Picker.Item label="Hábito (forma completa)" value="habit"/>
+            <Picker.Item label="Hoja" value="leaf" />
+            <Picker.Item label="Flor" value="flower" />
+            <Picker.Item label="Fruto" value="fruit" />
+            <Picker.Item label="Corteza" value="bark" />
+            <Picker.Item label="Hábito (forma completa)" value="habit" />
           </Picker>
         </View>
 

@@ -118,8 +118,8 @@ export default function HomeScreen({ navigation }) {
         />
         <View style={styles.carouselContainer}>
           <Text style={styles.ubicacionText}>
-          Ubicación actual: {city ? city : 'Desconocida'}
-        </Text>
+            Ubicación actual: {city ? city : 'Desconocida'}
+          </Text>
           <Text style={styles.subtitle}>Plantas observadas cerca de ti:</Text>
           <View style={styles.carouselBox}>
             {loading ? (
@@ -132,16 +132,16 @@ export default function HomeScreen({ navigation }) {
                 style={{ flexGrow: 0 }}
               >
                 {species.map((sp, idx) => (
-              <TouchableOpacity
-                key={idx}
-                style={styles.card}
-                onPress={() => openMapModal(sp.scientificName)}
-                activeOpacity={1}
-              >
-                <Image source={{ uri: sp.image }} style={styles.image} />
-                <Text style={styles.speciesName}>{sp.name}</Text>
-              </TouchableOpacity>
-            ))}
+                  <TouchableOpacity
+                    key={idx}
+                    style={styles.card}
+                    onPress={() => openMapModal(sp.scientificName)}
+                    activeOpacity={1}
+                  >
+                    <Image source={{ uri: sp.image }} style={styles.image} />
+                    <Text style={styles.speciesName}>{sp.name}</Text>
+                  </TouchableOpacity>
+                ))}
               </ScrollView>
             ) : (
               <Text style={{ fontStyle: 'italic', marginVertical: 10, color: '#1976d2' }}>
@@ -155,7 +155,7 @@ export default function HomeScreen({ navigation }) {
           style={styles.mainButton}
           onPress={() => navigation.navigate('Identificacion')}
         >
-          <Text style={styles.buttonText}>Hacer foto a una planta</Text>
+          <Text style={styles.buttonText}>Analizar una planta</Text>
         </TouchableOpacity>
 
         <TouchableOpacity

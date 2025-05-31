@@ -74,61 +74,61 @@ export default function LoginScreen({ navigation }) {
       style={styles.background}
       resizeMode="cover"
     >
-    <View style={styles.overlay}>
-      <View style={styles.logoRow}>
+      <View style={styles.overlay}>
+        <View style={styles.logoRow}>
           <Image
             source={require('../../assets/logotipo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
         </View>
-      <Text style={styles.title}>Iniciar Sesión</Text>
+        <Text style={styles.title}>Iniciar Sesión</Text>
 
-      <TextInput
-        placeholder="Nombre de usuario"
-        value={name}
-        onChangeText={setName}
-        style={styles.input}
-        placeholderTextColor="#fff"
-      />
+        <TextInput
+          placeholder="Nombre de usuario"
+          value={name}
+          onChangeText={setName}
+          style={styles.input}
+          placeholderTextColor="#fff"
+        />
 
-      <TextInput
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        placeholderTextColor="#fff"
-      />
+        <TextInput
+          placeholder="Correo electrónico"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          placeholderTextColor="#fff"
+        />
 
-      <TextInput
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        secureTextEntry
-        placeholderTextColor="#fff"
-      />
+        <TextInput
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+          secureTextEntry
+          placeholderTextColor="#fff"
+        />
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#007AFF" style={{ marginVertical: 16 }} />
-      ) : (
-        <TouchableOpacity style={styles.customButton} onPress={handleLogin} disabled={loading}>
-        <Text style={styles.customButtonText}>Entrar</Text>
-        </TouchableOpacity>
-      )}
+        {loading ? (
+          <ActivityIndicator size="large" color="#007AFF" style={{ marginVertical: 16 }} />
+        ) : (
+          <TouchableOpacity style={styles.customButton} onPress={handleLogin} disabled={loading}>
+            <Text style={styles.customButtonText}>Entrar</Text>
+          </TouchableOpacity>
+        )}
 
-      <Text style={styles.link} onPress={() => navigation.navigate('Registro')}>
-        ¿No tienes cuenta? Regístrate
-      </Text>
-    </View>
+        <Text style={styles.link} onPress={() => navigation.navigate('Registro')}>
+          ¿No tienes cuenta? Regístrate
+        </Text>
+      </View>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-    background: {
+  background: {
     flex: 1,
     width: '100%',
     height: '100%',
@@ -160,36 +160,36 @@ const styles = StyleSheet.create({
   },
   link: {
     marginTop: 25,
-    color: 'rgb(30, 210, 219)', 
+    color: 'rgb(30, 210, 219)',
     textAlign: 'center',
   },
   customButton: {
-  backgroundColor: 'blue',
-  padding: 14,
-  paddingHorizontal: 54,
-  borderRadius: 8,
-  alignItems: 'center',
-  marginTop: 8,
-  alignSelf: 'center',
-},
-customButtonText: {
-  color: '#fff',
-  fontWeight: 'bold',
-  fontSize: 16,
-},
-logoRow: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginBottom: -40,
-},
-logo: {
-  width: 410,
-  height: 410,
-},
-appName: {
-  fontSize: 48,
-  fontWeight: 'bold',
-  color: '#fff',
-  letterSpacing: 5,
-},
+    backgroundColor: 'blue',
+    padding: 14,
+    paddingHorizontal: 54,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 8,
+    alignSelf: 'center',
+  },
+  customButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  logoRow: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: -40,
+  },
+  logo: {
+    width: 410,
+    height: 410,
+  },
+  appName: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#fff',
+    letterSpacing: 5,
+  },
 });

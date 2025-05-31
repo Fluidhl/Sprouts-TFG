@@ -12,50 +12,50 @@ export default function RegisterScreen({ navigation }) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleRegister = async () => {
-  if (!name.trim()) {
-    Alert.alert('Error', 'El nombre es obligatorio');
-    return;
-  }
-  if (!emailRegex.test(email)) {
-    Alert.alert('Error', 'Email inválido');
-    return;
-  }
-  if (password.length < 6) {
-    Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
-    return;
-  }
-  if (password !== confirmPassword) {
-    Alert.alert('Error', 'Las contraseñas no coinciden');
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const { error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          name: name.trim(),
-        },
-      },
-    });
-
-    if (signUpError) {
-      Alert.alert('Error al registrarse', signUpError.message);
+    if (!name.trim()) {
+      Alert.alert('Error', 'El nombre es obligatorio');
       return;
     }
-    Alert.alert('¡Registro exitoso!', 'Tu cuenta ha sido creada correctamente.', [
-      { text: 'OK', onPress: () => navigation.replace('Login') },
-    ]);
-  } catch (e) {
-    console.error('Error inesperado en el registro:', e);
-    Alert.alert('Error inesperado', e.message || 'Ocurrió un error');
-  } finally {
-    setLoading(false);
-  }
-};
+    if (!emailRegex.test(email)) {
+      Alert.alert('Error', 'Email inválido');
+      return;
+    }
+    if (password.length < 6) {
+      Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Las contraseñas no coinciden');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name: name.trim(),
+          },
+        },
+      });
+
+      if (signUpError) {
+        Alert.alert('Error al registrarse', signUpError.message);
+        return;
+      }
+      Alert.alert('¡Registro exitoso!', 'Tu cuenta ha sido creada correctamente.', [
+        { text: 'OK', onPress: () => navigation.replace('Login') },
+      ]);
+    } catch (e) {
+      console.error('Error inesperado en el registro:', e);
+      Alert.alert('Error inesperado', e.message || 'Ocurrió un error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ImageBackground
@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   logo: {
-      width: 400,
-      height: 400,
+    width: 400,
+    height: 400,
   },
   title: {
     fontSize: 33,
