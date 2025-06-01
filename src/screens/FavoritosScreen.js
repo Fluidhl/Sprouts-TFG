@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal, ActivityIndicator, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MapView, { Heatmap } from 'react-native-maps';
+import MapView, { Heatmap, PROVIDER_GOOGLE } from 'react-native-maps';
 
 function GBIFImageCarousel({ scientificName }) {
   const [images, setImages] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, ActivityIndicator, Alert, ImageBackground, Modal } from 'react-native';
 import * as Location from 'expo-location';
-import MapView, { Marker, Heatmap } from 'react-native-maps';
+import MapView, { Marker, Heatmap, PROVIDER_GOOGLE } from 'react-native-maps';
 
 export default function HomeScreen({ navigation }) {
   const [location, setLocation] = useState(null);
