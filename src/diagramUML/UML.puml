@@ -1,0 +1,65 @@
+@startuml SproutsApp
+skinparam style strictuml
+
+package "Sprouts App" {
+    class App {
+        +NavigationContainer
+        +Stack.Navigator
+    }
+
+    class LoginScreen {
+        +handleLogin()
+        +setEmail()
+        +setPassword()
+        +setName()
+    }
+
+    class RegisterScreen {
+        +handleRegister()
+        +setEmail()
+        +setPassword()
+        +setName()
+        +setConfirmPassword()
+    }
+
+    class HomeScreen {
+        +useLocation()
+        +setSpecies()
+        +openMapModal()
+    }
+
+    class CameraScreen {
+        +pickImage()
+        +takePhoto()
+        +sendToPlantNet()
+        +setOrgan()
+    }
+
+    class ResultScreen {
+        +handleAddFavorite()
+        +openMapModal()
+        +GBIFImageCarousel
+    }
+
+    class FavoritosScreen {
+        +openMapModal()
+        +eliminarFavorito()
+        +GBIFImageCarousel
+    }
+
+    class GBIFImageCarousel
+
+    App --> LoginScreen
+    App --> RegisterScreen
+
+    ResultScreen ..> GBIFImageCarousel
+    FavoritosScreen ..> GBIFImageCarousel
+
+    CameraScreen --> ResultScreen : Navegación
+    HomeScreen --> FavoritosScreen : Navegación
+    HomeScreen --> CameraScreen : Navegación
+    RegisterScreen --> LoginScreen : Navegación
+    LoginScreen --> HomeScreen : Navegación
+}
+
+@enduml
