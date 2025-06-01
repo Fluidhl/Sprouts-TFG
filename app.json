@@ -25,7 +25,8 @@
         "googleMaps": {
           "apiKey": "AIzaSyBP20gHFsm8-CpAbX-25TGM3n0AbuFgy04"
         }
-      }
+      },
+      "package": "com.rhams.Sprouts"
     },
     "permissions": [
       "ACCESS_FINE_LOCATION",
@@ -33,7 +34,12 @@
       "INTERNET"
     ],
     "edgeToEdgeEnabled": true,
-    "package": "com.rhams.Sprouts"
+    "package": "com.rhams.Sprouts",
+    "extra": {
+      "eas": {
+        "projectId": "2eb7a1d9-d561-4e5d-bb34-8da1fa26d0e6"
+      }
+    }
   },
   "web": {
     "favicon": "./assets/favicon.png"
@@ -44,4 +50,3 @@
     }
   }
 }
-
