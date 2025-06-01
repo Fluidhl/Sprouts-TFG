@@ -9,7 +9,7 @@
     "newArchEnabled": true,
     "jsEngine": "jsc",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/apkIcon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,19 +18,30 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/apkIcon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.rhams.Sprouts"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "2eb7a1d9-d561-4e5d-bb34-8da1fa26d0e6"
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBP20gHFsm8-CpAbX-25TGM3n0AbuFgy04"
+        }
       }
+    },
+    "permissions": [
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION",
+      "INTERNET"
+    ],
+    "edgeToEdgeEnabled": true,
+    "package": "com.rhams.Sprouts"
+  },
+  "web": {
+    "favicon": "./assets/favicon.png"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "2eb7a1d9-d561-4e5d-bb34-8da1fa26d0e6"
     }
   }
 }
+
