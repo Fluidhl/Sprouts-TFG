@@ -214,6 +214,7 @@ export default function ResultScreen({ route, navigation }) {
                 <Text style={{ textAlign: 'center', marginTop: 30 }}>No hay datos de distribución.</Text>
               ) : (
                 <MapView
+                  provider={PROVIDER_GOOGLE}
                   style={{ width: '100%', height: 350, borderRadius: 10 }}
                   initialRegion={initialRegion}
                   region={initialRegion}

@@ -9,7 +9,7 @@
     "newArchEnabled": true,
     "jsEngine": "jsc",
     "splash": {
-      "image": "./assets/apkIcon.png",
+      "image": "./assets/Sprouts_main_icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
