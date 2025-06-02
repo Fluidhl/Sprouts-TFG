@@ -1,0 +1,46 @@
+@startuml Flujo
+start
+:Usuario abre app;
+if (¿Está logueado?) then (No)
+  :Mostrar login/registro;
+  if (¿Se registra?) then (Sí)
+    :Crear cuenta;
+    :Acceso a la app;
+  else (No)
+    if (¿Hace login?) then (Sí)
+      :Acceso a la app;
+    else (No)
+      stop
+    endif
+  endif
+else (Sí)
+  :Acceso a la app;
+endif
+
+:Mostrar pantalla principal;
+partition "Opciones" {
+  :Identificar planta;
+  :Ver plantas cercanas;
+  :Acceder a favoritos;
+  :Acceder a amigos;
+}
+
+if (¿Identificar planta?) then (Sí)
+  :Selecciona/toma foto;
+  :Elige parte de la planta;
+  :Envía imagen a API;
+  if (¿Respuesta recibida?) then (Sí)
+    :Muestra resultados, mapa, guardar favorito;
+  else (No)
+    :Muestra error;
+  endif
+endif
+
+if (¿Acceder a favoritos?) then (Sí)
+  :Muestra lista de favoritos;
+  :Ver detalles, mapa, eliminar;
+endif
+
+:Usuario puede cerrar sesión;
+stop
+@enduml
