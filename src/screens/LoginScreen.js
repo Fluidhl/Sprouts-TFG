@@ -16,7 +16,7 @@ import { supabase } from '../lib/supabaseClient';
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState(''); // <-- Añade este estado
+  const [name, setName] = useState(''); 
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
             .eq('id', user.id)
             .single();
 
-          // Actualiza la tabla
+          // Actualizar la tabla
           if (!existingUser) {
             await supabase.from('users').insert([
               {
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     paddingTop: 5,
-    backgroundColor: 'rgba(0,0,0,0.55)', // oscurece el fondo para mejor legibilidad
+    backgroundColor: 'rgba(0,0,0,0.55)',
   },
   title: {
     fontSize: 25,

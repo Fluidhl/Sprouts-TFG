@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 
 export default function CameraScreen({ navigation }) {
   const [imageUri, setImageUri] = useState(null);
-  const [organ, setOrgan] = useState('leaf'); // 🌿 valor por defecto
+  const [organ, setOrgan] = useState('leaf'); //valor por defecto
   const [loading, setLoading] = useState(false);
 
   const pickImage = async () => {
